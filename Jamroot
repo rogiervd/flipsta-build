@@ -1,0 +1,84 @@
+# Options file for Boost.Build.
+
+# Boost.Build is a make-like system. The main command is "bjam".
+# Calling "bjam" builds the main project.
+#   (A no-op for include-only libraries.)
+# Calling "bjam test" builds and runs the unit tests for the main project.
+# Calling "bjam test_all" builds and runs the unit tests for all projects in
+# this project.
+
+# The structure of this file is shared by Rogier van Dalen's C++ projects.
+
+# Make all builds and tests end up in "./bin".
+
+project : build-dir ./bin ;
+
+##### Project-specific settings.
+
+# Declare project id's and relate them to directories.
+# This will usually be a list like
+#   use-project /project-id : ./project-dir ;
+
+use-project /meta : ./meta ;
+use-project /utility : ./utility ;
+use-project /rime : ./rime ;
+use-project /range : ./range ;
+use-project /parse_ll : ./parse_ll ;
+use-project /math : ./math ;
+use-project /flipsta : ./flipsta ;
+
+##### Build targets.
+
+# Convenience definition so that "bjam" will build the main project.
+# Reference the main project's directory, probably with
+#   build-project ./project-dir ;
+
+build-project ./flipsta ;
+
+
+##### Explicit targets (which are only run on request).
+explicit test ;
+explicit test_all ;
+
+# Convenience definition so that "bjam test" will test the main project.
+# Reference the project's test target, probably with
+#   alias test : /project-id//test ;
+
+alias test : /flipsta//test ;
+
+# Convenience definition so that "bjam test_all" will test all included
+# projects.
+# Reference all projects' test targets, probably with
+#   alias test_all : /project1-id//test /project2-id//test ;
+# Do include the main project as well.
+
+alias test_all :
+    /meta//test
+    /utility//test
+    /rime//test
+    /range//test
+    /parse_ll//test
+    /math//test
+    /flipsta//test
+    ;
+
+################################################################################
+
+##### Helpers
+
+# Rule to run many separate tests at once.
+# Returns a list of [ run file_name ] .
+# Can be used as
+# test-suite "name_of_test_suite" : [ run_glob *.cpp ] ;
+
+rule run_glob ( files_to_include * : files_to_exclude * )
+{
+    local runnables = [ glob $(files_to_include) : $(files_to_exclude) ] ;
+    local runs = ;
+    for local runnable in $(runnables)
+    {
+        runs += [ run $(runnable) ] ;
+    }
+    return $(runs) ;
+}
+
