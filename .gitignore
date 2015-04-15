@@ -1,2 +1,3 @@
-# Ignore the "bin" directory.
+# Ignore directories with generated files.
 bin
+doc-build
