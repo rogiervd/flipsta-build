@@ -19,7 +19,7 @@ subProjects = ['math', 'parse_ll', 'range', 'rime', 'utility', 'meta']
 mainProjectName = 'Flipsta library'
 
 # The copyright.
-copyright = '2014 Rogier van Dalen'
+copyright = '2014-2015 Rogier van Dalen'
 
 # Version of the main project.
 version = '0.1'
