@@ -15,7 +15,7 @@ before_install:
   - wget https://github.com/boostorg/build/raw/develop/src/contrib/boost.jam -O ~/boost.jam
 
 install:
-  - sudo apt-get install -qq libboost-all-dev
+  - sudo apt-get install -qq libboost1.48-all-dev python-dev
 
 # It just so happens that ${CC} corresponds to the Boost.Build toolset name.
 script: bjam test toolset=${CC} variant=${VARIANT}
