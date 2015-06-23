@@ -25,6 +25,7 @@ release = documentation_configuration.release
 
 pygments_style = 'sphinx'
 html_theme = 'nature'
+templates_path = ['_templates']
 
 # Options for Breathe.
 breathe_projects = { documentation_configuration.mainProject: "../doxygen/xml" }
