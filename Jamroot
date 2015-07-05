@@ -66,6 +66,8 @@ alias test_all :
 
 ##### Helpers
 
+import feature ;
+
 # Rule to run many separate tests at once.
 # Returns a list of [ run file_name ] .
 # Can be used as
@@ -82,3 +84,28 @@ rule run_glob ( files_to_include * : files_to_exclude * )
     return $(runs) ;
 }
 
+# Rule that uses the appropriate version of <library>/boost//python.
+# It seems that there is /boost//python and /boost//python3.
+# The difference is at link time.
+# To be able to test with both Python versions, it makes sense to automatically
+# choose the correct library depending on the version on Python interpreter that
+# is to be used.
+# If you add
+#     <conditional>@appropriate_boost_python
+# to the list of requirements, this will be turned into
+#     <library>/boost//python
+# or
+#     <library>/boost//python3
+# depending on the version of Python (the value of the <python> property).
+
+rule appropriate_boost_python ( properties * )
+{
+    local pyversion = [ feature.get-values "python" : $(properties) ] ;
+    if $(pyversion) < 3.0
+    {
+        return <library>/boost//python ;
+    } else
+    {
+        return <library>/boost//python3 ;
+    }
+}
